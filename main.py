@@ -1,27 +1,27 @@
+import datetime
+
 from kakuro_simple import Kakuro
+from kakuro_plus import KakuroPlus
+from maps import custom_version, easy_puzzle, medium_puzzle, hard_puzzle, expert_puzzle
 
-INF = float('inf')
-game = Kakuro(
-    n=5,
-    m=5,
-    block_fields=[
-        (0, 0),
-        (0, 1),
-        (0, 4),
-        (4, 4),
-        (1, 0),
-        (4, 0),
-    ],
-    hint_fields=[
-        {'i': 0, 'j': 2, 'limit': {"down": 22, "right": INF}},
-        {'i': 0, 'j': 3, 'limit': {"down": 12, "right": INF}},
-        {'i': 1, 'j': 1, 'limit': {"down": 15, "right": 12}},
-        {'i': 1, 'j': 4, 'limit': {"down": 9, "right": INF}},
-        {'i': 2, 'j': 0, 'limit': {"down": INF, "right": 13}},
-        {'i': 3, 'j': 0, 'limit': {"down": INF, "right": 29}},
-        {'i': 4, 'j': 1, 'limit': {"down": INF, "right": 4}},
-    ]
-)
 
-game.solve()
-game.show()
+if __name__ == '__main__':
+    for difficulty, map in {"custom": custom_version,"easy": easy_puzzle, "medium": medium_puzzle, "hard": hard_puzzle, "expert": expert_puzzle}.items():
+        print(f"solving {difficulty} map")
+        print(f"with simple version...")
+        game = Kakuro(**map)
+        game_plus = KakuroPlus(**map)
+
+        cur_time = datetime.datetime.now()
+        game.solve()
+        game.show()
+        new_time = datetime.datetime.now()
+        print(f"{difficulty}: Time for simple version:", new_time - cur_time)
+
+        print(f"with plus version...")
+        cur_time = datetime.datetime.now()
+        game_plus.solve()
+        game_plus.show()
+
+        new_time = datetime.datetime.now()
+        print(f"{difficulty}:Time for plus version:", new_time - cur_time)

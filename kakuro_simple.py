@@ -12,7 +12,6 @@ class Kakuro:
             for j in range(m):
                 ls.append('*')
             self.map.append(ls)
-        self.map[1][1] = '$'
         for field in hint_fields:
             self.map[field['i']][field['j']] = field['limit']
         for field in block_fields:
@@ -43,7 +42,6 @@ class Kakuro:
                         break
                     res += self.map[row][j]
                 if res != lim['right']:
-                    # print(res, helper)
                     return False
             if lim['down'] != INF:
                 res = 0
@@ -52,9 +50,7 @@ class Kakuro:
                         break
                     res += self.map[i][col]
                 if res != lim['down']:
-                    # print(res, helper, 'd')
                     return False
-        print(res, "TTT")
         return True
 
     def get_empty_cell(self):
@@ -67,7 +63,7 @@ class Kakuro:
         num_cells = list()
         cur_hint = None
         for i in range(self.n):
-            if i>=row and (isinstance(self.map[i][col], dict) or self.map[i][col] != '#'):
+            if i>=row and (isinstance(self.map[i][col], dict) or self.map[i][col] == '#'):
                 break
             if isinstance(self.map[i][col], dict):
                 cur_hint = self.map[i][col]
@@ -79,13 +75,16 @@ class Kakuro:
         if not cur_hint:
             return True
         res = 0
+        star_count = 0
         for val in num_cells:
             if val!='*':
                 if val == num:
                     return False
                 else:
                     res += val
-        if res+num<=cur_hint['down']:
+            else:
+                star_count += 1
+        if res+num <= cur_hint['down'] <= res+num+(star_count - 1)*9:
             return True
         else:
             return False
@@ -94,7 +93,7 @@ class Kakuro:
         num_cells = list()
         cur_hint = None
         for j in range(self.m):
-            if j>=col and (isinstance(self.map[row][j], dict) or self.map[row][j] != '#'):
+            if j>=col and (isinstance(self.map[row][j], dict) or self.map[row][j] == '#'):
                 break
             if isinstance(self.map[row][j], dict):
                 cur_hint = self.map[row][j]
@@ -106,19 +105,21 @@ class Kakuro:
         if not cur_hint:
             return True
         res = 0
+        star_count = 0
         for val in num_cells:
             if val!='*':
                 if val == num:
                     return False
                 else:
                     res += val
-        if res+num <= cur_hint['right']:
+            else:
+                star_count+=1
+        if res+num <= cur_hint['right'] <= res + num + (star_count - 1) * 9:
             return True
         else:
             return False
 
     def show(self):
-        print(self.map)
         for row in range(self.n):
             res = ''
             for col in range(self.m):
@@ -127,3 +128,4 @@ class Kakuro:
                 else:
                     res += f'{self.map[row][col]} '
             print(res)
+        print()
