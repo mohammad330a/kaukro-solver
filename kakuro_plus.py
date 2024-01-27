@@ -47,20 +47,6 @@ class KakuroPlus(Kakuro):
                     result = self.constrained_values[(row, col)]
                     cand_cell = row, col
 
-        for row in range(self.n):
-            for col in range(self.m):
-                if self.map[row][col] == '*':
-                    col_hint = None
-                    for i in range(row):
-                        if isinstance(self.map[i][col], dict):
-                            col_hint = self.map[i][col]
-                    row_hint = None
-                    for i in range(col):
-                        if isinstance(self.map[row][i], dict):
-                            row_hint = self.map[row][i]
-                    if min(col_hint['down'], row_hint['right']) <= result:
-                        result = min(col_hint['down'], row_hint['right'])
-                        cand_cell = row, col
         return cand_cell, result
 
     def get_column_helper(self, row, col):
